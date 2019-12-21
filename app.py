@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite://data/hist_trips.sqlite")
+engine = create_engine("sqlite:/data/hist_trips.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -48,7 +48,7 @@ def names():
     session = Session(engine)
 
     """Return a list of all passenger names"""
-    # Query all passengers
+    # Query all stations
     results = session.query(Stations.trip_id).all()
 
     session.close()
@@ -65,12 +65,12 @@ def trips():
     session = Session(engine)
 
     """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+    # Query all trips data
     results = session.query(Trips.trip_id, Trips.station_from_id, Trips.station_to_id).all()
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+    # Create a dictionary from the row data and append to a list of all_trips
     all_trips = []
     for trip_id, station_from_id, station_to_id in results:
         trips_dict = {}
