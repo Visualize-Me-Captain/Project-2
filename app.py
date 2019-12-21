@@ -1,17 +1,86 @@
-from flask import Flask, render_template
-import os
-import csv
- 
-app = Flask (__name__)
-    with open('file.csv') as csvDataFile: csvReader = csv.reader(csvDataFile)
-    for row in csvReader:
-        print(row)
- 
+import numpy as np
+
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+
+from flask import Flask, jsonify
+
+
+#################################################
+# Database Setup
+#################################################
+engine = create_engine("sqlite://data/hist_trips.sqlite")
+
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
+# Save reference to the table
+Trips = Base.classes.hist_trips
+Stations = Base.classes.stations
+
+#################################################
+# Flask Setup
+#################################################
+app = Flask(__name__)
+
+
+#################################################
+# Flask Routes
+#################################################
+
 @app.route("/")
-def index():
-    data = dataset.html
-    #return dataset.html
-    return render_template('index.html', data=data)
- 
-if __name__ == "__main__":
-    app.run()
+def welcome():
+    """List all available api routes."""
+    return (
+        f"Available Routes:<br/>"
+        f"/api/v1.0/stations<br/>"
+        f"/api/v1.0/trips<br/>"
+    )
+
+
+@app.route("/api/v1.0/stations")
+def names():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(Stations.trip_id).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    all_stations = list(np.ravel(results))
+
+    return jsonify(all_stations)
+
+
+@app.route("/api/v1.0/trips")
+def trips():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of passenger data including the name, age, and sex of each passenger"""
+    # Query all passengers
+    results = session.query(Trips.trip_id, Trips.station_from_id, Trips.station_to_id).all()
+
+    session.close()
+
+    # Create a dictionary from the row data and append to a list of all_passengers
+    all_trips = []
+    for trip_id, station_from_id, station_to_id in results:
+        trips_dict = {}
+        trips_dict["trip_id"] = trip_id
+        trips_dict["station_from_id"] = station_from_id
+        trips_dict["station_to_id"] = station_to_id
+        all_trips.append(trips_dict)
+
+    return jsonify(all_trips)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
