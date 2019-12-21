@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:/data/hist_trips.sqlite")
+engine = create_engine("sqlite:///data/hist_trips.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -19,8 +19,8 @@ Base = automap_base()
 Base.prepare(engine, reflect=True)
 
 # Save reference to the table
-Trips = Base.classes.hist_trips
-Stations = Base.classes.stations
+#Trips = Base.classes.hist_trips
+#Stations = Base.classes.stations
 
 #################################################
 # Flask Setup
@@ -43,7 +43,7 @@ def welcome():
 
 
 @app.route("/api/v1.0/stations")
-def names():
+def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
