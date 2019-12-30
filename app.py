@@ -5,7 +5,8 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
+import os
 
 
 #################################################
@@ -33,13 +34,14 @@ app = Flask(__name__)
 #################################################
 
 @app.route("/")
-def welcome():
-    """List all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/trips<br/>"
-    )
+def index():
+    return render_template('index.html')
+    # """List all available api routes."""
+    # return (
+    #     f"Available Routes:<br/>"
+    #     f"/api/v1.0/stations<br/>"
+    #     f"/api/v1.0/trips<br/>"
+    # )
 
 
 @app.route("/api/v1.0/stations")
@@ -81,6 +83,13 @@ def trips():
 
     return jsonify(all_trips)
 
+@app.route("/station")
+def station():
+    return render_template('bike.html')
+
+@app.route("/bikerack")
+def rack():
+    return render_template('bikerack.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
