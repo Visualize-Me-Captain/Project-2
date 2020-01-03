@@ -13,7 +13,7 @@
   html,
 body,
 #map-id {
-  height: 100%;
+  height: 100%; 
   padding: 0;
   margin: 0;
 }
@@ -48,4 +48,7 @@ body,
 
 .legend .out-of-order {
   color: #007dff;
+}
+
+h1 {color: lightskyblue;
 }

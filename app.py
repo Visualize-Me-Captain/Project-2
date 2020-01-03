@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -20,14 +20,39 @@ Base = automap_base()
 Base.prepare(engine, reflect=True)
 
 # Save reference to the table
-#Trips = Base.classes.hist_trips
-#Stations = Base.classes.stations
+# Trips = Base.classes.hist_trips
+# Stations = Base.classes.stations
 
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
 
+
+#################################################
+# set up global variables to be used throughout the dashboard
+#################################################
+
+# Capture all data from the hist_trips table inside hist_trips.sqlite
+riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
+
+# Capture alld data from the stations table inside hist_trips.sqlite
+stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
+
+# Join station name on from station id
+from_station_name = pd.merge(riders_tbl, stations_tbl, left_on='from_station_id', right_on='ID')
+
+ # Peform another join to also add station name for the to station id
+station_names = pd.merge(from_station_name, stations_tbl, left_on='to_station_id', right_on='ID')
+
+# Select the columns you want to use.
+df = station_names[['Station Name_x', 'Station Name_y', 'gender', 'tripduration']]
+# Change tripduration to a numeric value
+df["tripduration"] = pd.to_numeric(df["tripduration"], errors = 'coerce')
+df_trips = df.astype({"Station Name_x": str, "Station Name_y": str, "gender": str, "tripduration": float})
+
+# Drop rows with NAN's
+df_trips = df.dropna()
 
 #################################################
 # Flask Routes
@@ -44,6 +69,7 @@ def index():
     # )
 
 
+# John are you uisng this route?????
 @app.route("/api/v1.0/stations")
 def stations():
     # Create our session (link) from Python to the DB
@@ -60,7 +86,7 @@ def stations():
 
     return jsonify(all_stations)
 
-
+# John are you uisng this route?????
 @app.route("/api/v1.0/trips")
 def trips():
     # Create our session (link) from Python to the DB
@@ -90,6 +116,34 @@ def station():
 @app.route("/bikerack")
 def rack():
     return render_template('bikerack.html')
+
+@app.route("/biketrip")
+def trip_data():
+    """Return station, start time and end time""" """Utilized lesson 15.3 activity 03 emojies as an example"""
+
+    # Query for the top 10 emoji data
+    results = db.session.query(hist_trips.from_station_id, hist_trips.to_station_id, hist_trips.tripduration).\
+        order_by(Trips_DataFrame.from_station_id.desc()).\
+        limit(10).all()
+    df = pd.DataFrame(results, columns=['from_station_id', 'start_time'])
+
+    # Format the data for Plotly
+    plot_trace = {
+        "x": df["from_station_id"].values.tolist(),
+        "y": df["start_time"].values.tolist(),
+        "type": "bar"
+    }
+    return jsonify(plot_trace)
+
+@app.route("/example")
+def trip_example():
+    # Capture all data from the hist_trips table inside hist_trips.sqlite
+    riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
+
+    # Capture alld data from the stations table inside hist_trips.sqlite
+    stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,58 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='../css/style.css') }}"/> -->
-  
-   <!-- Bring in our bootstrap stylesheet -->
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-   <!-- <link rel="stylesheet" type=text/css href="../css/style.css"/> -->
-   
-       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
- 
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<!--css stylsheet-->
+<link rel="stylesheet" href="../static/css/style.css">
+
  </head>
   <title>Divvy Bikes</title>
 </head>
 <body>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Divvy</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="station">Bike Stations</a>
+            <a class="nav-link" href="station">Station Status</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="bikerack">Bike Rack</a>
+            <a class="nav-link" href="trips">Bike Trips</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <a class="nav-link" href="dasbhoard">Dashboard</a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div class="jumbotron" style="background-image: url(https://www.connect.media/wp-content/uploads/2019/09/ch_Divvy-bikes.jpg); background-size: cover;">
-      <div class="container for-about">
-      <h1>Divvy</h1>
+    <div class="jumbotron" style="background-image: url(http://www.midamericanprint.com/wp-content/uploads/2011/12/chicago1.jpg); background-size: cover;">
+      <div class="container-fluid">
+        <img src="https://d21xlh2maitm24.cloudfront.net/chi/DivvyLogo_p_v2.svg?mtime=20170608140727" width="150" height="230" alt="">
       </div>
-    
   </div>
+  <div class="container">
+    <div class="row" id="Divvy-News">
+      <div class="col-md-8">
+        <h1>Latest Divvy News</h1>
+        <h2>A Chicagoan’s Guide to Winter Cycling</h2>
+        <p>"Every winter, Chicago teems with dedicated cyclists braving the slush and low temperatures. During the 2018 Polar Vortex, we had 199 winter warriors pedaling through bone-chilling temperatures as low as -54 degrees! Luckily, Divvy bikes are built to withstand all of Chicago’s seasons. Our bike checkers and technicians ensure all of our bikes are safe to ride and make repairs when needed. Here are some cold-weather biking tips to get you ready for riding in winter weather."</p>
+        <p>"Winter in Chicago means less daylight out on the bike lanes. Every Divvy bike has multiple reflectors and self-powered LED lights at the front and rear. The bright lights make sure you’re visible when riding in dark conditions. And they always stay on because they’re powered by your pedaling. You can never be too safe; though — we also recommend wearing bright colors and reflective gear to make yourself more visible to drivers."</p>
+        <p>"Throw on an extra pair of socks or a pair of thick wool ones underneath your winter boots. Get yourself a nice pair of waterproof, wind-resistant gloves so you don’t lose feeling in your fingers or your grip on the handlebars. Keep your noggin toasty with a helmet liner or a knitted hat under your helmet."</p>
+        <p>"Wear layers to keep warm — layer pants with thermals or athletic tights. Just don’t overdress, as you’ll warm up quickly when cycling. Using a helmet with less ventilation will help keep you warm against strong winds. Underneath your jacket, sport a moisture-wicking base layer."</p>
+        <p>"Winter in Chicago means frosty bike seats, and that means a wet butt on the ride home. Start every ride on a clean, dry saddle with a Divvy bike seat cover. Don’t have one? A plastic shopping bag works just as well! They’re lightweight, they slip on easily, and they fit in your pocket. "</p>
+        <p>"Safety is our number-one priority when it comes to our riders. Have a backup plan in case the weather conditions aren’t suitable for cycling. Keep your eyes peeled for patches of ice — if you encounter any, avoid sudden braking or swerving, as this can cause you to slide. Pedal lightly and be delicate on the brakes. "</p>
+      </div>    
+      <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+          <img src="https://www.chicagotribune.com/resizer/xBcr_L9tMSKK8KjIupTh5CIOTjg=/800x523/top/arc-anglerfish-arc2-prod-tronc.s3.amazonaws.com/public/KFHGMQQPVRGAJCKHAWMKFPGNSM.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">
+              <img src="https://d21xlh2maitm24.cloudfront.net/chi/DivvyLogo_p_v2.svg?mtime=20170608140727" width="75" height="50" alt=""></h5>
+            <p class="card-text">If you work in the city or visit frequently you have seen the light blue bikes roaming the streets.  Divvy is a bike share program that targets both those seeking quick trips around town or leisurely rides through the park.
+              On Divvy’s website they highlight popular rides such as, Lakefront Trail North, Lakefront Trail South, The 606, and Milwaukee Avenue. Today we will be verifying which routes are the busiest while gaining understanding on who those riders are.
+              </p>
+            <a href="https://www.divvybikes.com/" class="btn btn-primary">Checkout Divvy.com</a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-  <!-- Our JavaScript -->
-  <!-- <script type="text/javascript" src="/static/js/D3logic.js"></script> -->
-  <!-- <div class="table">
-    {% block body %}
-    {{ data|safe }}
-    {% endblock %}  
-  </div> -->
 </body>
 </html>
