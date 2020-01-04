@@ -9,6 +9,29 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="station">Station Status</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="trips">Bike Trips</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
     <div id="bar"></div>
     <select id="selDataset" onchange="getData(this.value)">
         <option value="emoji_char">Emoji Char</option>
@@ -16,7 +39,7 @@
         <option value="emoji_name">Emoji Name</option>
     </select>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script type="text/javascript" src="static/js/app.js"></script>
 
 </body>
 </html>
