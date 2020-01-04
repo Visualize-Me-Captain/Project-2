@@ -40,13 +40,13 @@ class Riders(db.Model):
     __tablename__ = 'riders'
 
     id = db.Column(db.Integer, primary_key=True)
-    Stationx = db.Column(db.String)
-    Stationy = db.Column(db.String)
-    Locationx = db.Column(db.String)
-    Locationy = db.Column(db.String)
+    Station_Name_x = db.Column(db.String)
+    Station_Name_y = db.Column(db.String)
+    Location_x = db.Column(db.String)
+    Location_y = db.Column(db.String)
     gender = db.Column(db.String)
-    duration = db.Column
-    counts = db.Column(db.Integer)
+    Avg_duration = db.Column
+    Trip_counts = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Riders %r>' % (self.name)
@@ -101,50 +101,31 @@ def index():
     #     f"/api/v1.0/trips<br/>"
     # )
 
+@app.route("/dashboard/web")
+def web():
+    return render_template('dashboard.html')
 
-# John are you uisng this route?????
-@app.route("/dashboard")
+# Json data
+@app.route("/dashboard/json")
 def stations():
    
     # Query for the top 10 stations
-    results = db.session.query(Riders."Station Name_x", Riders.Trip_counts).\
-        order_by(Riders.counts.desc()).\
+    results = db.session.query(Riders.Station_Name_x, Riders.gender, Riders.Trip_counts).\
+        order_by(Riders.Trip_counts.desc()).\
         limit(10).all()
 
     # Create lists from the query results
     Stationx = [result[0] for result in results]
-    counts = [int(result[1]) for result in results]
+    gender = [result[1] for result in results]
+    counts = [int(result[2]) for result in results]
 
     # Generate the plot trace
     trace = {
-        "x": gender,
+        "x": Stationx,
         "y": counts,
         "type": "bar"
     }
     return jsonify(trace)
-
-# John are you uisng this route?????
-@app.route("/api/v1.0/trips")
-def trips():
-    # Create our session (link) from Python to the DB
-    session = Session(engine)
-
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all trips data
-    results = session.query(Trips.trip_id, Trips.station_from_id, Trips.station_to_id).all()
-
-    session.close()
-
-    # Create a dictionary from the row data and append to a list of all_trips
-    all_trips = []
-    for trip_id, station_from_id, station_to_id in results:
-        trips_dict = {}
-        trips_dict["trip_id"] = trip_id
-        trips_dict["station_from_id"] = station_from_id
-        trips_dict["station_to_id"] = station_to_id
-        all_trips.append(trips_dict)
-
-    return jsonify(all_trips)
 
 @app.route("/station")
 def station():
