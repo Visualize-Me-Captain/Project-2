@@ -45,8 +45,8 @@ class Riders(db.Model):
     Location_x = db.Column(db.String)
     Location_y = db.Column(db.String)
     gender = db.Column(db.String)
-    Avg_duration = db.Column
-    Trip_counts = db.Column(db.Integer)
+    Avg_duration = db.Column(db.Float)
+    Trip_counts = db.Column(db.Float)
 
     def __repr__(self):
         return '<Riders %r>' % (self.name)
@@ -60,48 +60,14 @@ def setup():
     db.create_all()
 
 #################################################
-# set up global variables to be used throughout the dashboard
-#################################################
-
-# # Capture all data from the hist_trips table inside hist_trips.sqlite
-# riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
-
-# # Capture alld data from the stations table inside hist_trips.sqlite
-# stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
-
-# # Join station name on from station id
-# from_station_name = pd.merge(riders_tbl, stations_tbl, left_on='from_station_id', right_on='ID')
-
-#  # Peform another join to also add station name for the to station id
-# station_names = pd.merge(from_station_name, stations_tbl, left_on='to_station_id', right_on='ID')
-
-# # Select the columns you want to use.
-# df = station_names[['Station Name_x', 'Station Name_y', 'gender', 'tripduration']]
-# # Change tripduration to a numeric value
-# df["tripduration"] = pd.to_numeric(df["tripduration"], errors = 'coerce')
-# df_trips = df.astype({"Station Name_x": str, "Station Name_y": str, "gender": str, "tripduration": float})
-
-# # Drop rows with NAN's
-# df_trips = df.dropna()
-
-# # Find the average drip duration
-# df_trips = df_trips.groupby(['Station Name_x', 'Station Name_y', 'gender']).mean()
-
-#################################################
 # Flask Routes
 #################################################
 
 @app.route("/")
 def index():
     return render_template('index.html')
-    # """List all available api routes."""
-    # return (
-    #     f"Available Routes:<br/>"
-    #     f"/api/v1.0/stations<br/>"
-    #     f"/api/v1.0/trips<br/>"
-    # )
 
-@app.route("/dashboard/web")
+@app.route("/dashboard")
 def web():
     return render_template('dashboard.html')
 
@@ -110,18 +76,19 @@ def web():
 def stations():
    
     # Query for the top 10 stations
-    results = db.session.query(Riders.Station_Name_x, Riders.gender, Riders.Trip_counts).\
-        order_by(Riders.Trip_counts.desc()).\
+    results = db.session.query(Riders.Station_Name_x, Riders.Station_Name_y, Riders.gender, Riders.Trip_counts).\
+        order_by(Riders.Trip_counts.desc()).filter(Riders.Station_Name_x=="Canal St & Adams St").\
         limit(10).all()
 
     # Create lists from the query results
     Stationx = [result[0] for result in results]
-    gender = [result[1] for result in results]
-    counts = [int(result[2]) for result in results]
+    Stationy = [result[1] for result in results]
+    gender = [result[2] for result in results]
+    counts = [int(result[3]) for result in results]
 
     # Generate the plot trace
     trace = {
-        "x": Stationx,
+        "x": Stationy,
         "y": counts,
         "type": "bar"
     }
