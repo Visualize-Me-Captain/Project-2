@@ -4,7 +4,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, render_template
 import os
 
@@ -28,31 +28,64 @@ Base.prepare(engine, reflect=True)
 #################################################
 app = Flask(__name__)
 
+#################################################
+# The database URI
+#################################################
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data/riders.sqlite"
+
+db = SQLAlchemy(app)
+
+# Create our database model
+class Riders(db.Model):
+    __tablename__ = 'riders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    Stationx = db.Column(db.String)
+    Stationy = db.Column(db.String)
+    Locationx = db.Column(db.String)
+    Locationy = db.Column(db.String)
+    gender = db.Column(db.String)
+    duration = db.Column
+    counts = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Riders %r>' % (self.name)
+
+
+# Create database tables
+@app.before_first_request
+def setup():
+    # Recreate database each time for demo
+    # db.drop_all()
+    db.create_all()
 
 #################################################
 # set up global variables to be used throughout the dashboard
 #################################################
 
-# Capture all data from the hist_trips table inside hist_trips.sqlite
-riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
+# # Capture all data from the hist_trips table inside hist_trips.sqlite
+# riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
 
-# Capture alld data from the stations table inside hist_trips.sqlite
-stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
+# # Capture alld data from the stations table inside hist_trips.sqlite
+# stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
 
-# Join station name on from station id
-from_station_name = pd.merge(riders_tbl, stations_tbl, left_on='from_station_id', right_on='ID')
+# # Join station name on from station id
+# from_station_name = pd.merge(riders_tbl, stations_tbl, left_on='from_station_id', right_on='ID')
 
- # Peform another join to also add station name for the to station id
-station_names = pd.merge(from_station_name, stations_tbl, left_on='to_station_id', right_on='ID')
+#  # Peform another join to also add station name for the to station id
+# station_names = pd.merge(from_station_name, stations_tbl, left_on='to_station_id', right_on='ID')
 
-# Select the columns you want to use.
-df = station_names[['Station Name_x', 'Station Name_y', 'gender', 'tripduration']]
-# Change tripduration to a numeric value
-df["tripduration"] = pd.to_numeric(df["tripduration"], errors = 'coerce')
-df_trips = df.astype({"Station Name_x": str, "Station Name_y": str, "gender": str, "tripduration": float})
+# # Select the columns you want to use.
+# df = station_names[['Station Name_x', 'Station Name_y', 'gender', 'tripduration']]
+# # Change tripduration to a numeric value
+# df["tripduration"] = pd.to_numeric(df["tripduration"], errors = 'coerce')
+# df_trips = df.astype({"Station Name_x": str, "Station Name_y": str, "gender": str, "tripduration": float})
 
-# Drop rows with NAN's
-df_trips = df.dropna()
+# # Drop rows with NAN's
+# df_trips = df.dropna()
+
+# # Find the average drip duration
+# df_trips = df_trips.groupby(['Station Name_x', 'Station Name_y', 'gender']).mean()
 
 #################################################
 # Flask Routes
@@ -70,21 +103,25 @@ def index():
 
 
 # John are you uisng this route?????
-@app.route("/api/v1.0/stations")
+@app.route("/dashboard")
 def stations():
-    # Create our session (link) from Python to the DB
-    session = Session(engine)
+   
+    # Query for the top 10 stations
+    results = db.session.query(Riders."Station Name_x", Riders.Trip_counts).\
+        order_by(Riders.counts.desc()).\
+        limit(10).all()
 
-    """Return a list of all passenger names"""
-    # Query all stations
-    results = session.query(Stations.trip_id).all()
+    # Create lists from the query results
+    Stationx = [result[0] for result in results]
+    counts = [int(result[1]) for result in results]
 
-    session.close()
-
-    # Convert list of tuples into normal list
-    all_stations = list(np.ravel(results))
-
-    return jsonify(all_stations)
+    # Generate the plot trace
+    trace = {
+        "x": gender,
+        "y": counts,
+        "type": "bar"
+    }
+    return jsonify(trace)
 
 # John are you uisng this route?????
 @app.route("/api/v1.0/trips")
