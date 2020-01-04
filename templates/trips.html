@@ -12,12 +12,17 @@
   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
   crossorigin=""/>
 
+  <!-- Icons -->
+  <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="../static/css/leaflet.extra-markers.min.css">
+
   <!-- Our CSS -->
   <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
   <!-- Bring in our bootstrap stylesheet -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+  <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}"/> -->
   <link rel="stylesheet" type=text/css href="../static/css/style.css">
   
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -28,7 +33,6 @@
 <body>
   <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Divvy</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -38,35 +42,43 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="station">Bike Stations</a>
+            <a class="nav-link" href="station">Station Status</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="trips">Bike Trips</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="bikerack">Bike Rack</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link dashboard" href="#" tabindex="-1" aria-disabled="true">Dashboard</a>
+            <a class="nav-link" href="dashboard">Dashboard</a>
           </li>
         </ul>
       </div>
     </nav>
   </div> 
+  <!-- The div that holds our map -->
+  <div id="map-id"></div>
 
-  <!-- The div that holds our station data -->
-</div>
-<div class="bikerack">
-</div>
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script>
+
+  <!-- MomentJS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+  integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+  crossorigin=""></script>
+
+  <!-- Icons -->
+  <script src="/static/js/leaflet.extra-markers.min.js"></script>
+
+  <!-- polyfill.io is library for using newer JavaScript features in older browers (such as Object.assign) -->
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
   <!-- API Key -->
   <script type="text/javascript" src="../static/js/config.js"></script>
 
-  <!-- D3 reference-->
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
   <!-- Our JavaScript -->
-  <script type="text/javascript" src="../static/js/D3logic.js"></script>
+  <script type="text/javascript" src="../static/js/logic_2.js"></script>
 
 </body>
 

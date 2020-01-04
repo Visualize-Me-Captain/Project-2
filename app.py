@@ -120,6 +120,32 @@ def trip_data():
     }
     return jsonify(plot_trace)
 
+@app.route("/trips")
+def please():
+    return render_template('trips.html')
+
+@app.route("/api/trips")
+def trips():
+
+    riders_tbl = pd.read_sql("SELECT * FROM hist_trips", con=engine)
+    stations_tbl = pd.read_sql("SELECT * FROM stations", con=engine)
+
+    from_station_name = pd.merge(riders_tbl, stations_tbl, left_on='from_station_id', right_on='ID')
+    station_names = pd.merge(from_station_name, stations_tbl, left_on='to_station_id', right_on='ID')
+    df = station_names[['from_station_id','to_station_id','Latitude_x','Longitude_x','Latitude_y','Longitude_y']]
+    df = df.rename(columns={'from_station_id':'station_a','to_station_id': 'station_b'})
+    df_count = df
+    df_count['count_max'] = df_count.groupby(['station_a','station_b','Latitude_x','Longitude_x','Latitude_y','Longitude_y'])['station_b'].transform('count')
+    idx = df_count.groupby(['station_a'])['count_max'].transform(max) == df['count_max']
+    df_max = df[idx]
+    df_final = (df_max.sort_values(['station_a', 'count_max'], ascending=[True, False])
+             .drop_duplicates(['count_max']).reset_index(drop=True)
+          )
+
+    json_final = df_final.to_json(orient = 'records')
+ 
+    return json_final
+
 @app.route("/example")
 def trip_example():
     # Capture all data from the hist_trips table inside hist_trips.sqlite
